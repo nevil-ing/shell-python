@@ -7,9 +7,9 @@ def main():
 
     # Wait for user input
     input()
-    x = input()
+    command = input()
 
-    print(f"{x}:command not found")
+    print(f"{command}: command not found")
 
 if __name__ == "__main__":
     main()
