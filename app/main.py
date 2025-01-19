@@ -17,8 +17,8 @@ def main():
              print("exit is a shell builtin")
          case ["type", "type"]:
              print("type is a shell builtin")
-         case ["type", *args]:
-             print(f"{args}: not found")
+         case ["type", arg]:
+             print(f"{arg}: not found")
          case _:
              print(f"{command}: command not found")
 
