@@ -7,18 +7,14 @@ def main():
      sys.stdout.write("$ ")
 
      command = input()
-     if command == "exit 0":
-          sys.exit(0)
-     command.startswith("echo")
-     output = command.lstrip('echo')
 
-     print(f"{output.strip()}")
-
-     print(f"{command}: command not found")
-
-
-
-
+     match command.split():
+         case ["exit", "0"]:
+             exit()
+         case ["echo", *args]:
+             print(*args)
+         case _:
+             print(f"{command}: command not found")
 
 
 if __name__ == "__main__":
