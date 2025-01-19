@@ -10,8 +10,9 @@ def main():
      if command == "exit 0":
           sys.exit(0)
      command.startswith("echo")
-     output = command.lstrip('echo ')
-     print(f"{output}")
+     output = command.lstrip('echo')
+
+     print(f"{output.strip()}")
 
      #print(f"{command}: command not found")
 
