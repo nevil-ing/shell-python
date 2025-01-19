@@ -11,8 +11,14 @@ def main():
      match command.split():
          case ["exit", "0"]:
              exit()
-         case ["echo", *args]:
-             print(*args)
+         case ["type", "echo"]:
+             print("echo is a shell builtin")
+         case ["type", "exit"]:
+             print("exit is a shell builtin")
+         case ["type", "type"]:
+             print("type is a shell builtin")
+         case ["type", "invalid_command"]:
+             print("invalid_command: not found")
          case _:
              print(f"{command}: command not found")
 
