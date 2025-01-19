@@ -19,6 +19,9 @@ def main():
              print("type is a shell builtin")
          case ["type", arg]:
              print(f"{arg}: not found")
+         case ["echo", *args]:
+             print(*args)
+
          case _:
              print(f"{command.split()[0]}: command not found")
 
