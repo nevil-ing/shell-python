@@ -14,7 +14,7 @@ def main():
 
      print(f"{output.strip()}")
 
-     #print(f"{command}: command not found")
+     print(f"{command}: command not found")
 
 
 
