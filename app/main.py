@@ -17,10 +17,10 @@ def main():
              print("exit is a shell builtin")
          case ["type", "type"]:
              print("type is a shell builtin")
-         case ["type", "echo", arg]:
+         case ["type", arg]:
              print(f"{arg}: not found")
          case _:
-             print(f"{command}: command not found")
+             print(f"{command.split()[0]}: command not found")
 
 
 if __name__ == "__main__":
