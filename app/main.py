@@ -18,7 +18,7 @@ def main():
          case ["type", "type"]:
              print("type is a shell builtin")
          case ["type", *args]:
-             print(*args,":not found")
+             print(f"{args}: not found")
          case _:
              print(f"{command}: command not found")
 
