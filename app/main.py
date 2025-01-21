@@ -33,7 +33,7 @@ def main():
 
          case _:
 
-             if os.path.isfile(command.split(" ")[0]):
+             if os.path.isfile(command.split()[0]):
                  os.system(command)
              else:
                  print(f"{command.split()[0]}: command not found")
