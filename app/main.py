@@ -32,7 +32,12 @@ def main():
              print(*args)
 
          case _:
-             print(f"{command.split()[0]}: command not found")
+
+             if os.path.isfile(command.split(" ")[0]):
+                 os.system(command)
+             else:
+                 print(f"{command.split()[0]}: command not found")
+
 
 
 if __name__ == "__main__":
