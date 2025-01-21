@@ -20,7 +20,7 @@ def main():
          case ["type", arg]:
              cmd = arg
              cmd_path = None
-             paths = os.pathsep
+             paths = os.environ.get("PATH", "").split(os.pathsep)
              for path in paths:
                  if os.path.isfile(f"{path}/{cmd}"):
                      cmd_path = f"{path}/{cmd}"
@@ -28,7 +28,7 @@ def main():
                  print(f"{cmd} is a shell builtin")
              elif cmd_path:
                  print(f"{cmd} is {cmd_path}")
-            # print(f"{arg}: not found")
+             print(f"{arg}: not found")
          case ["echo", *args]:
              print(*args)
 
