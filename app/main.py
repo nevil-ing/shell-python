@@ -28,7 +28,7 @@ def main():
                  print(f"{cmd} is a shell builtin")
              elif cmd_path:
                  print(f"{cmd} is {cmd_path}")
-             print(f"{arg}: not found")
+            # print(f"{arg}: not found")
          case ["echo", *args]:
              print(*args)
 
