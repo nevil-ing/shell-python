@@ -24,7 +24,6 @@ def main():
              for path in paths:
                  if os.path.isfile(f"{path}/{cmd}"):
                      cmd_path = f"{path}/{cmd}"
-
              if cmd_path:
                  print(f"{cmd} is {cmd_path}")
              else:
