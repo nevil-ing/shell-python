@@ -1,5 +1,6 @@
 import sys
 import os
+import subprocess
 
 def main():
     PATH = os.environ.get("PATH")
@@ -45,10 +46,13 @@ def main():
                      break
 
              if executable:
-                os.execvp(executable, [cmd_name, *cmd_args])
+                 try:
+                     subprocess.run([executable, *cmd_args], check=True)
+                 except subprocess.CalledProcessError as e:
+                     print(f"Error while executing {cmd_name}: {e}")
              else:
-                 print(f"{command.split()[0]}: command not found")
+                 print(f"{cmd_name}: command not found")
 
-             sys.stdout.write("$ ")
+
 if __name__ == "__main__":
     main()
