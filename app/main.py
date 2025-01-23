@@ -46,8 +46,10 @@ def main():
                      break
 
              if executable:
+
+                 cmd_dis_name = os.path.basename(executable)
                  try:
-                     subprocess.run([executable, *cmd_args], check=True)
+                     subprocess.run([cmd_dis_name, *cmd_args], check=True)
                  except subprocess.CalledProcessError as e:
                      print(f"Error while executing {cmd_name}: {e}")
              else:
