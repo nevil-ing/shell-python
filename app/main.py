@@ -45,12 +45,9 @@ def main():
                      break
 
              if executable:
-
-
                 os.execvp(executable, [cmd_name, *cmd_args])
-
              else:
-                 print(f"{cmd_name}: command not found")
+                 print(f"{command.split()[0]}: command not found")
 
 
 if __name__ == "__main__":
