@@ -49,6 +49,6 @@ def main():
              else:
                  print(f"{command.split()[0]}: command not found")
 
-
+             sys.stdout.write("$ ")
 if __name__ == "__main__":
     main()
