@@ -20,7 +20,7 @@ def main():
          case ["exit", "0"]:
              exit()
          case ["type", cmd] if cmd in BUILTINS:
-             print(BUILTINS[command])
+             print(BUILTINS[cmd])
          case ["type", cmd]:
 
              cmd_path = None
