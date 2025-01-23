@@ -4,22 +4,24 @@ import subprocess
 
 def main():
     PATH = os.environ.get("PATH")
+
+    BUILTINS = {
+        "echo": "echo is a shell builtin",
+        "exit": "exit is a shell builtin",
+        "type": "type is a shell builtin"
+    }
     while True:
      sys.stdout.write("$ ")
-
+     sys.stdout.flush()
      command = input()
 
      match command.split():
          case ["exit", "0"]:
              exit()
-         case ["type", "echo"]:
-             print("echo is a shell builtin")
-         case ["type", "exit"]:
-             print("exit is a shell builtin")
-         case ["type", "type"]:
-             print("type is a shell builtin")
-         case ["type", arg]:
-             cmd = arg
+         case ["type", cmd] if cmd in BUILTINS:
+             print(BUILTINS[command])
+         case ["type", cmd]:
+
              cmd_path = None
              paths = os.environ.get("PATH", "").split(os.pathsep)
              for path in paths:
@@ -28,7 +30,7 @@ def main():
              if cmd_path:
                  print(f"{cmd} is {cmd_path}")
              else:
-                 print(f"{arg}: not found")
+                 print(f"{cmd}: not found")
          case ["echo", *args]:
              print(*args)
 
