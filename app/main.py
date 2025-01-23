@@ -34,9 +34,8 @@ def main():
                  print(f"{cmd}: not found")
          case ["echo", *args]:
              print(*args)
-         case ["pwd", cmd]:
-             cur_dir = os.getcwd()
-             print(f"{cur_dir}")
+         case ["pwd"]:
+            print(os.getcwd())
 
          case _:
              cmd_parts = command.split()
