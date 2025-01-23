@@ -10,7 +10,8 @@ def main():
         "echo": "echo is a shell builtin",
         "exit": "exit is a shell builtin",
         "type": "type is a shell builtin",
-        "pwd" : "pwd is a shell builtin"
+        "pwd" : "pwd is a shell builtin",
+        "cd" : "cd is a shell builtin"
     }
     while True:
      sys.stdout.write("$ ")
@@ -37,6 +38,13 @@ def main():
              print(*args)
          case ["pwd"]:
             print(os.getcwd())
+         case ["cd", args]:
+             new_dir = args
+             try:
+                os.chdir(new_dir)
+             except FileNotFoundError:
+                 print(f"cd: {new_dir}: No such file or directory")
+
 
          case _:
              cmd_parts = command.split()
