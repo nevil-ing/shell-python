@@ -33,11 +33,25 @@ def main():
 
          case _:
 
-             if os.path.isfile(command.split()[0]):
-                 os.system(command)
-             else:
-                 print(f"{command.split()[0]}: command not found")
+             cmd_parts = command.split()
+             cmd_name = cmd_parts[0]
+             cmd_args = cmd_parts[1:]
 
+             executable = None
+             for path in os.environ.get("PATH", "").split(os.pathsep):
+                 potential_executable = os.path.join(path, cmd_name)
+                 if os.path.isfile(potential_executable) and os.access(potential_executable, os.X_OK):
+                     executable = potential_executable
+                     break
+
+             if executable:
+
+                 try:
+                     os.execvp(executable, [cmd_name, *cmd_args])
+                 except FileNotFoundError:
+                     print(f"{cmd_name}: command not found")
+             else:
+                 print(f"{cmd_name}: command not found")
 
 
 if __name__ == "__main__":
