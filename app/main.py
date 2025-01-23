@@ -8,7 +8,8 @@ def main():
     BUILTINS = {
         "echo": "echo is a shell builtin",
         "exit": "exit is a shell builtin",
-        "type": "type is a shell builtin"
+        "type": "type is a shell builtin",
+        "pwd" : "pwd is a shell builtin"
     }
     while True:
      sys.stdout.write("$ ")
@@ -33,6 +34,11 @@ def main():
                  print(f"{cmd}: not found")
          case ["echo", *args]:
              print(*args)
+         case ["pwd", cmd]:
+             paths = os.environ.get("PATH", "").split(os.pathsep)
+             for path in paths:
+                 if os.path.curdir:
+                     print(f"{path}")
 
          case _:
 
