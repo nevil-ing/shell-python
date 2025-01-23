@@ -46,10 +46,9 @@ def main():
 
              if executable:
 
-                 try:
-                     os.execvp(executable, [cmd_name, *cmd_args])
-                 except FileNotFoundError:
-                     print(f"{cmd_name}: command not found")
+
+                os.execvp(executable, [cmd_name, *cmd_args])
+
              else:
                  print(f"{cmd_name}: command not found")
 
