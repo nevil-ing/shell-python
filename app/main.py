@@ -35,13 +35,10 @@ def main():
          case ["echo", *args]:
              print(*args)
          case ["pwd", cmd]:
-             paths = os.environ.get("PATH", "").split(os.pathsep)
-             for path in paths:
-                 if os.path.curdir:
-                     print(f"{path}")
+             cur_dir = os.getcwd()
+             print(f"{cur_dir}")
 
          case _:
-
              cmd_parts = command.split()
              cmd_name = cmd_parts[0]
              cmd_args = cmd_parts[1:]
