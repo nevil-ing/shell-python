@@ -38,6 +38,9 @@ def main():
              print(*args)
          case ["pwd"]:
             print(os.getcwd())
+         case ["cd", "~"]:
+             home_dir = os.path.expanduser("~")
+             os.chdir(home_dir)
          case ["cd", args]:
              new_dir = args
              try:
