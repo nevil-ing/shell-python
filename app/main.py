@@ -3,6 +3,9 @@ import os
 import subprocess
 import shlex
 
+from tensorflow.python.ops.gen_dataset_ops import iterator
+
+
 def main():
     PATH = os.environ.get("PATH")
 
@@ -17,6 +20,30 @@ def main():
 
     def shell_echo_commands(arguments):
       print(" ".join(arguments))
+
+    def handle_redirection(parsed_command):
+        stdout_file = None
+        stderr_file = None
+        stdout_mode = "w"
+        stderr_mode = "w"
+
+        command = []
+        iterator = iter(parsed_command)
+        for token in iterator:
+            if token == ">":
+                stdout_file = next(iterator)
+            elif token == ">>":
+                stdout_file = next(iterator)
+                stdout_mode = "a"
+            elif token == "2>":
+                stderr_file = next(iterator)
+            elif token == "2>>":
+                stderr_file = next(iterator)
+                stderr_mode = "a"
+            else:
+                command.append(token)
+        return command, stdout_file, stderr_file,stdout_mode, stderr_mode
+
 
     while True:
      sys.stdout.write("$ ")
@@ -59,6 +86,8 @@ def main():
              cmd_name = parsed_command[0]
              cmd_args = parsed_command[1:]
 
+             cmd_args, stdout_file, stderr_file,stdout_mode, stderr_mode = handle_redirection(parsed_command)
+
              executable = None
              for path in os.environ.get("PATH", "").split(os.pathsep):
                  potential_executable = os.path.join(path, cmd_name)
@@ -67,14 +96,20 @@ def main():
                      break
 
              if executable:
-
-                 cmd_dis_name = os.path.basename(executable)
                  try:
-                     subprocess.run([cmd_dis_name, *cmd_args], check=True)
+                     with open(stdout_file, stdout_mode) if stdout_file else None as stdout, \
+                             open(stderr_file, stderr_mode) if stderr_file else None as stderr:
+                         subprocess.run(
+                             [executable, *cmd_args],
+                             stdout=stdout or sys.stdout,
+                             stderr=stderr or sys.stderr,
+                             check=True
+                         )
+                 except FileNotFoundError:
+                     print(f"Error: {cmd_name} not found.")
                  except subprocess.CalledProcessError as e:
                      print(f"Error while executing {cmd_name}: {e}")
              else:
                  print(f"{cmd_name}: command not found")
-
 if __name__ == "__main__":
     main()
