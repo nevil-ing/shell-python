@@ -95,19 +95,25 @@ def main():
                      break
 
              if executable:
-                 try:
-                     with open(stdout_file, stdout_mode) if stdout_file else None as stdout, \
-                             open(stderr_file, stderr_mode) if stderr_file else None as stderr:
-                         subprocess.run(
-                             [executable, *cmd_args],
-                             stdout=stdout or sys.stdout,
-                             stderr=stderr or sys.stderr,
-                             check=True
-                         )
-                 except FileNotFoundError:
-                     print(f"Error: {cmd_name} not found.")
-                 except subprocess.CalledProcessError as e:
-                     print(f"Error while executing {cmd_name}: {e}")
+                 if stdout_file or stderr_file:
+                     stdout = open(stdout_file, stdout_mode) if stdout_file else None
+                     stderr = open(stderr_file, stderr_mode) if stderr_file else None
+
+                     try:
+                         subprocess.run(parsed_command, stdout=stdout, stderr=stderr, check=True)
+                     except subprocess.CalledProcessError as e:
+                         print(f"Error while executing command: {e}")
+                     finally:
+                         if stdout:
+                             stdout.close()
+                         if stderr:
+                             stderr.close()
+                 else:
+                     try:
+                         subprocess.run(parsed_command, check=True)
+                     except subprocess.CalledProcessError as e:
+                         print(f"Error while executing command: {e}")
+
              else:
                  print(f"{cmd_name}: command not found")
 if __name__ == "__main__":
