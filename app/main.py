@@ -95,24 +95,36 @@ def main():
                      break
 
              if executable:
-                 if stdout_file or stderr_file:
-                     stdout = open(stdout_file, stdout_mode) if stdout_file else None
-                     stderr = open(stderr_file, stderr_mode) if stderr_file else None
 
+                 if ">" in parsed_command or ">>" in parsed_command:
                      try:
-                         subprocess.run(parsed_command, stdout=stdout, stderr=stderr, check=True)
+                         # Check for redirection operators
+                         if ">>" in parsed_command:
+                             operator_index = parsed_command.index(">>")
+                             mode = "a"  # Append mode
+                         else:
+                             operator_index = parsed_command.index(">")
+                             mode = "w"  # Overwrite mode
+
+                         # Extract the output file path and command
+                         output_file = parsed_command[operator_index + 1]
+                         command_to_run = parsed_command[:operator_index]
+
+                         # Open the file and redirect stdout
+                         with open(output_file, mode) as outfile:
+                             subprocess.run(command_to_run, stdout=outfile, stderr=subprocess.PIPE, check=True)
+
+                     except FileNotFoundError as e:
+                         print(f"Error: {e}")
                      except subprocess.CalledProcessError as e:
                          print(f"Error while executing command: {e}")
-                     finally:
-                         if stdout:
-                             stdout.close()
-                         if stderr:
-                             stderr.close()
                  else:
+                     # Normal command execution without redirection
                      try:
                          subprocess.run(parsed_command, check=True)
                      except subprocess.CalledProcessError as e:
                          print(f"Error while executing command: {e}")
+
 
              else:
                  print(f"{cmd_name}: command not found")
