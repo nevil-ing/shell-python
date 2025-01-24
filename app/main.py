@@ -3,7 +3,6 @@ import os
 import subprocess
 import shlex
 
-from tensorflow.python.ops.gen_dataset_ops import iterator
 
 
 def main():
