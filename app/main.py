@@ -96,35 +96,35 @@ def main():
 
              if executable:
 
-                 if ">" in parsed_command or ">>" in parsed_command:
-                     try:
-                         # Check for redirection operators
-                         if ">>" in parsed_command:
-                             operator_index = parsed_command.index(">>")
-                             mode = "a"  # Append mode
-                         else:
-                             operator_index = parsed_command.index(">")
-                             mode = "w"  # Overwrite mode
-
-                         # Extract the output file path and command
+                 try:
+                     # Handle redirection (stdout)
+                     if "1>" in parsed_command:
+                         operator_index = parsed_command.index("1>")
                          output_file = parsed_command[operator_index + 1]
                          command_to_run = parsed_command[:operator_index]
 
-                         # Open the file and redirect stdout
-                         with open(output_file, mode) as outfile:
+                         # Redirect stdout to the file
+                         with open(output_file, "w") as outfile:
                              subprocess.run(command_to_run, stdout=outfile, stderr=subprocess.PIPE, check=True)
 
-                     except FileNotFoundError as e:
-                         print(f"Error: {e}")
-                     except subprocess.CalledProcessError as e:
-                         print(f"Error while executing command: {e}")
-                 else:
-                     # Normal command execution without redirection
-                     try:
-                         subprocess.run(parsed_command, check=True)
-                     except subprocess.CalledProcessError as e:
-                         print(f"Error while executing command: {e}")
+                     # Handle redirection (stderr)
+                     elif "2>" in parsed_command:
+                         operator_index = parsed_command.index("2>")
+                         error_file = parsed_command[operator_index + 1]
+                         command_to_run = parsed_command[:operator_index]
 
+                         # Redirect stderr to the file
+                         with open(error_file, "w") as errfile:
+                             subprocess.run(command_to_run, stdout=subprocess.PIPE, stderr=errfile, check=True)
+
+                     # Normal execution without redirection
+                     else:
+                         subprocess.run(parsed_command, check=True)
+
+                 except FileNotFoundError as e:
+                     print(f"File not found error: {e}")
+                 except subprocess.CalledProcessError as e:
+                     print(f"Command execution failed: {e}")
 
              else:
                  print(f"{cmd_name}: command not found")
