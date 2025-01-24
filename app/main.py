@@ -1,6 +1,7 @@
 import sys
 import os
 import subprocess
+import shlex
 
 def main():
     PATH = os.environ.get("PATH")
@@ -13,6 +14,13 @@ def main():
         "pwd" : "pwd is a shell builtin",
         "cd" : "cd is a shell builtin"
     }
+    def shell_echo_commands(arguments):
+        for i in range(len(arguments)):
+            if (arguments[i].startswith("'") and arguments[i].endswith("'")) or (arguments[i].startswith('"') and arguments[i].endswith('"')):
+                arguments[i] = arguments[i][1:-1]
+        print(" ".join(arguments))
+
+
     while True:
      sys.stdout.write("$ ")
      sys.stdout.flush()
@@ -35,7 +43,8 @@ def main():
              else:
                  print(f"{cmd}: not found")
          case ["echo", *args]:
-             print(*args)
+            # print(*args)
+             shell_echo_commands(args)
          case ["pwd"]:
             print(os.getcwd())
          case ["cd", "~"]:
@@ -47,7 +56,6 @@ def main():
                 os.chdir(new_dir)
              except FileNotFoundError:
                  print(f"cd: {new_dir}: No such file or directory")
-
 
          case _:
              cmd_parts = command.split()
