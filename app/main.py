@@ -16,21 +16,15 @@ def main():
     }
 
     def shell_echo_commands(arguments):
-        # Arguments are already split, remove surrounding quotes if present
-        cleaned_args = []
-        for arg in arguments:
-            if (arg.startswith("'") and arg.endswith("'")) or (arg.startswith('"') and arg.endswith('"')):
-                cleaned_args.append(arg[1:-1])  # Remove the quotes
-            else:
-                cleaned_args.append(arg)  # Keep as is if not quoted
-        print(" ".join(cleaned_args))  # Print the cleaned arguments joined by spaces
+      print(" ".join(arguments))
 
     while True:
      sys.stdout.write("$ ")
      sys.stdout.flush()
      command = input()
+     parsed_command = shlex.split(command)
 
-     match command.split():
+     match parsed_command:
          case ["exit", "0"]:
              exit()
          case ["type", cmd] if cmd in BUILTINS:
