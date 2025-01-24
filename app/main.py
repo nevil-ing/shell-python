@@ -14,12 +14,16 @@ def main():
         "pwd" : "pwd is a shell builtin",
         "cd" : "cd is a shell builtin"
     }
-    def shell_echo_commands(arguments):
-        for i in range(len(arguments)):
-            if (arguments[i].startswith("'") and arguments[i].endswith("'")) or (arguments[i].startswith('"') and arguments[i].endswith('"')):
-                arguments[i] = arguments[i][1:-1]
-        print(" ".join(arguments))
 
+    def shell_echo_commands(arguments):
+        # Arguments are already split, remove surrounding quotes if present
+        cleaned_args = []
+        for arg in arguments:
+            if (arg.startswith("'") and arg.endswith("'")) or (arg.startswith('"') and arg.endswith('"')):
+                cleaned_args.append(arg[1:-1])  # Remove the quotes
+            else:
+                cleaned_args.append(arg)  # Keep as is if not quoted
+        print(" ".join(cleaned_args))  # Print the cleaned arguments joined by spaces
 
     while True:
      sys.stdout.write("$ ")
