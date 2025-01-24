@@ -56,9 +56,8 @@ def main():
                  print(f"cd: {new_dir}: No such file or directory")
 
          case _:
-             cmd_parts = command.split()
-             cmd_name = cmd_parts[0]
-             cmd_args = cmd_parts[1:]
+             cmd_name = parsed_command[0]
+             cmd_args = parsed_command[1:]
 
              executable = None
              for path in os.environ.get("PATH", "").split(os.pathsep):
