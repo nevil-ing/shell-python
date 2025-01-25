@@ -29,7 +29,7 @@ def main():
         for token in iterator:
             if token == ">":
                 stdout_file = next(iterator)
-            elif token == ">>":
+            elif token == "1>":
                 stdout_file = next(iterator)
                 stdout_mode = "a"
             elif token == "2>":
@@ -108,7 +108,7 @@ def main():
                         print(f"Command execution failed: {e}")
                 else:
                     print(f"{cmd_name}: command not found")
-
-
 if __name__ == "__main__":
     main()
+
+
