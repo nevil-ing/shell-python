@@ -67,10 +67,9 @@ def main():
                 else:
                     print(f"{cmd}: not found")
             case ["echo", *args]:
-                # Special case for 'echo' with possible redirection handled here
                 command_to_execute, stdout_file, stderr_file, stdout_mode, stderr_mode = handle_redirection(
                     parsed_command)
-                if stdout_file or stderr_file:  # If there is a redirection on echo, use subprocess.run
+                if stdout_file or stderr_file:
                     cmd_name = command_to_execute[0]
                     cmd_args = command_to_execute[1:]
 
@@ -94,11 +93,11 @@ def main():
                                 stderr.close()
                         except FileNotFoundError:
                             print(f"{cmd_name}: command not found")
-                        except subprocess.CalledProcessError as e:
-                            print(f"Command execution failed: {e}")
+                        except subprocess.CalledProcessError:
+                            pass  # Do not print error to stdout. Just continue prompt.
                     else:
                         print(f"{cmd_name}: command not found")
-                else:  # if there is no redirection, we can use the shell_echo_commands.
+                else:
                     shell_echo_commands(args)
             case ["pwd"]:
                 print(os.getcwd())
@@ -136,8 +135,8 @@ def main():
                             stderr.close()
                     except FileNotFoundError:
                         print(f"{cmd_name}: command not found")
-                    except subprocess.CalledProcessError as e:
-                        print(f"Command execution failed: {e}")
+                    except subprocess.CalledProcessError:
+                        pass  # Do not print error to stdout. Just continue prompt.
                 else:
                     print(f"{cmd_name}: command not found")
 
