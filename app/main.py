@@ -31,6 +31,7 @@ def main():
                 stdout_file = next(iterator)
             elif token == "1>":
                 stdout_file = next(iterator)
+                stdout_mode = "a"
             elif token == "2>":
                 stderr_file = next(iterator)
             elif token == "2>>":
@@ -66,7 +67,39 @@ def main():
                 else:
                     print(f"{cmd}: not found")
             case ["echo", *args]:
-                shell_echo_commands(args)
+                # Special case for 'echo' with possible redirection handled here
+                command_to_execute, stdout_file, stderr_file, stdout_mode, stderr_mode = handle_redirection(
+                    parsed_command)
+                if stdout_file or stderr_file:  # If there is a redirection on echo, use subprocess.run
+                    cmd_name = command_to_execute[0]
+                    cmd_args = command_to_execute[1:]
+
+                    executable = None
+                    for path in os.environ.get("PATH", "").split(os.pathsep):
+                        potential_executable = os.path.join(path, cmd_name)
+                        if os.path.isfile(potential_executable) and os.access(potential_executable, os.X_OK):
+                            executable = potential_executable
+                            break
+
+                    if executable:
+                        try:
+                            stdout = open(stdout_file, stdout_mode) if stdout_file else None
+                            stderr = open(stderr_file, stderr_mode) if stderr_file else None
+
+                            subprocess.run([executable, *cmd_args], stdout=stdout, stderr=stderr, check=True)
+
+                            if stdout:
+                                stdout.close()
+                            if stderr:
+                                stderr.close()
+                        except FileNotFoundError:
+                            print(f"{cmd_name}: command not found")
+                        except subprocess.CalledProcessError as e:
+                            print(f"Command execution failed: {e}")
+                    else:
+                        print(f"{cmd_name}: command not found")
+                else:  # if there is no redirection, we can use the shell_echo_commands.
+                    shell_echo_commands(args)
             case ["pwd"]:
                 print(os.getcwd())
             case ["cd", "~"]:
