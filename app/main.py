@@ -31,7 +31,6 @@ def main():
                 stdout_file = next(iterator)
             elif token == "1>":
                 stdout_file = next(iterator)
-                stdout_mode = "a"
             elif token == "2>":
                 stderr_file = next(iterator)
             elif token == "2>>":
@@ -79,10 +78,10 @@ def main():
                 except FileNotFoundError:
                     print(f"cd: {directory}: No such file or directory")
             case _:
-                cmd_name = parsed_command[0]
-                cmd_args = parsed_command[1:]
-
-                cmd_args, stdout_file, stderr_file, stdout_mode, stderr_mode = handle_redirection(parsed_command)
+                command_to_execute, stdout_file, stderr_file, stdout_mode, stderr_mode = handle_redirection(
+                    parsed_command)
+                cmd_name = command_to_execute[0]
+                cmd_args = command_to_execute[1:]
 
                 executable = None
                 for path in os.environ.get("PATH", "").split(os.pathsep):
@@ -96,7 +95,7 @@ def main():
                         stdout = open(stdout_file, stdout_mode) if stdout_file else None
                         stderr = open(stderr_file, stderr_mode) if stderr_file else None
 
-                        subprocess.run(cmd_args, stdout=stdout, stderr=stderr, check=True)
+                        subprocess.run([executable, *cmd_args], stdout=stdout, stderr=stderr, check=True)
 
                         if stdout:
                             stdout.close()
@@ -108,7 +107,7 @@ def main():
                         print(f"Command execution failed: {e}")
                 else:
                     print(f"{cmd_name}: command not found")
+
+
 if __name__ == "__main__":
     main()
-
-
