@@ -6,7 +6,7 @@ import shlex
 
 def completer(text, state):
     """Auto-complete function for built in commands."""
-    builtin = ["echo ", "type ", "pwd ", "cd "]
+    builtin = ["echo ", "type ", "pwd ", "cd ", "exit "]
     matches = [cmd for cmd in builtin if cmd.startswith(text)]
     return matches[state] if state < len(matches) else None
 
