@@ -3,11 +3,29 @@ import sys
 import os
 import subprocess
 import shlex
+from sys import executable
+
+from tornado.gen import Return
+
+
+def executables():
+    executables = []
+    paths = os.getenv("PATH").split(":")
+    for path in paths:
+        if os.path.isdir(path):
+            executables.extend(
+                [
+                    f
+                    for f in os.listdir(path)
+                    if os.access(os.path.join(path, f), os.X_OK)
+                ]
+            )
+    return executables
 
 def completer(text, state):
     """Auto-complete function for built in commands."""
     builtin = ["echo ", "type ", "pwd ", "cd ", "exit "]
-    matches = [cmd for cmd in builtin if cmd.startswith(text)]
+    matches = [cmd for cmd in builtin + executables() if cmd.startswith(text)]
     return matches[state] if state < len(matches) else None
 
 
