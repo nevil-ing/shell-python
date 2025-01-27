@@ -10,6 +10,7 @@ def completer(text, state):
     matches = [cmd for cmd in builtin if cmd.startswith(text)]
     return matches[state] if state < len(matches) else None
 
+
 def main():
     PATH = os.environ.get("PATH")
 
