@@ -131,12 +131,12 @@ def main():
                         break
 
                 if executable:
-
+                    cms_dis_name = os.path.basename(executable)
                     try:
                         stdout = open(stdout_file, stdout_mode) if stdout_file else None
                         stderr = open(stderr_file, stderr_mode) if stderr_file else None
 
-                        subprocess.run([executable, *cmd_args], stdout=stdout, stderr=stderr, check=True)
+                        subprocess.run([cms_dis_name, *cmd_args], stdout=stdout, stderr=stderr, check=True)
 
                         if stdout:
                             stdout.close()
@@ -145,7 +145,7 @@ def main():
                     except FileNotFoundError:
                         print(f"{cmd_name}: command not found")
                     except subprocess.CalledProcessError:
-                        pass  # Do not print error to stdout. Just continue prompt.
+                        pass
                 else:
                     print(f"{cmd_name}: command not found")
 
