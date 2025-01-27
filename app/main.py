@@ -29,14 +29,22 @@ def main():
         for token in iterator:
             if token == ">":
                 stdout_file = next(iterator)
+                stdout_mode = "w"  # Set write mode for >
             elif token == "1>":
                 stdout_file = next(iterator)
-                stdout_mode = "a"
+                stdout_mode = "w"  # Set write mode for 1>
+            elif token == ">>":
+                stdout_file = next(iterator)
+                stdout_mode = "a"  # Set append mode for >>
+            elif token == "1>>":
+                stdout_file = next(iterator)
+                stdout_mode = "a"  # Set append mode for 1>>
             elif token == "2>":
                 stderr_file = next(iterator)
+                stderr_mode = "w"  # Set write mode for 2>
             elif token == "2>>":
                 stderr_file = next(iterator)
-                stderr_mode = "a"
+                stderr_mode = "a"  # Set append mode for 2>>
             else:
                 command.append(token)
         return command, stdout_file, stderr_file, stdout_mode, stderr_mode
@@ -123,12 +131,12 @@ def main():
                         break
 
                 if executable:
-                    cms_dis_name = os.path.basename(executable)
+
                     try:
                         stdout = open(stdout_file, stdout_mode) if stdout_file else None
                         stderr = open(stderr_file, stderr_mode) if stderr_file else None
 
-                        subprocess.run([cms_dis_name, *cmd_args], stdout=stdout, stderr=stderr, check=True)
+                        subprocess.run([executable, *cmd_args], stdout=stdout, stderr=stderr, check=True)
 
                         if stdout:
                             stdout.close()
