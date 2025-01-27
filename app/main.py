@@ -5,7 +5,7 @@ import subprocess
 import shlex
 from sys import executable
 
-from tornado.gen import Return
+
 
 
 def executables():
