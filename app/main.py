@@ -44,7 +44,7 @@ def completer(text, state):
             if matches:
                 sys.stdout.write("\n" + "".join(matches) + "\n")
 
-                sys.stdout.write(f"$ {text}")
+                sys.stdout.write(f"${text}")
 
                 sys.stdout.flush()
 
