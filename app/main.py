@@ -26,7 +26,7 @@ def completer(text, state):
     """Auto-complete function for built in commands."""
     builtin = ["echo ", "type ", "pwd ", "cd ", "exit "]
     matches = [cmd for cmd in builtin + executables() if cmd.startswith(text)]
-    return matches[state] + "" if state < len(matches) else None
+    return matches[state] + " " if state < len(matches) else None
 
 
 def main():
