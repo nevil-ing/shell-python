@@ -42,7 +42,7 @@ def completer(text, state):
     if last_tab_pressed["count"] == 2:
 
             if matches:
-                sys.stdout.write("  ".join(matches) + "\n")
+                sys.stdout.write(" ".join(matches) + "\n")
                 sys.stdout.write(f"$ {text}")
 
                 sys.stdout.flush()
