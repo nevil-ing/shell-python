@@ -24,8 +24,34 @@ def executables():
 
 def completer(text, state):
     """Auto-complete function for built in commands."""
+    last_tab_pressed = {"count": 0, "last_text": ""}
     builtin = ["echo ", "type ", "pwd ", "cd ", "exit"]
     matches = [cmd for cmd in builtin + executables() if cmd.startswith(text)]
+
+    if state == 0: # first time tab pressed
+        if last_tab_pressed["last_text"] == text:
+            last_tab_pressed["count"] += 1
+        else:
+            last_tab_pressed = {"count": 1, "last_text": text}
+        #handle first tab press: ring the bell
+        if last_tab_pressed["count"] == 1:
+            sys.stdout.write("\a")  # Ring the bell
+            sys.stdout.flush()
+
+            #handle second tab press
+    if last_tab_pressed["count"] == 2:
+
+            if matches:
+                sys.stdout.write("\n" + "  ".join(matches) + "\n")
+
+                sys.stdout.write(f"$ {text}")
+
+                sys.stdout.flush()
+
+            last_tab_pressed["count"] = 0  # Reset count after showing matches
+
+            return None
+
     return matches[state] + " " if state < len(matches) else None
 
 
