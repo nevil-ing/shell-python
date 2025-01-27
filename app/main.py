@@ -1,8 +1,14 @@
+import readline
 import sys
 import os
 import subprocess
 import shlex
 
+def completer(text, state):
+    """Auto-complete function for built in commands."""
+    builtin = ["echo", "type", "pwd", "cd"]
+    matches = [cmd for cmd in builtin if cmd.startswith(text)]
+    return matches[state] if state < len(matches) else None
 
 def main():
     PATH = os.environ.get("PATH")
@@ -14,9 +20,12 @@ def main():
         "pwd": "pwd is a shell builtin",
         "cd": "cd is a shell builtin",
     }
+    readline.set_completer(completer)
+    readline.parse_and_bind("tab: complete")
 
     def shell_echo_commands(arguments):
         print(" ".join(arguments))
+
 
     def handle_redirection(parsed_command):
         stdout_file = None
