@@ -116,7 +116,10 @@ def main():
             if last_tab_pressed["count"] == 2:
                 display_matches(command)
                 last_tab_pressed["count"] = 0
-                display_matches(command)
+                continue  # continue so the main loop will start from the prompt again
+            else:
+                continue
+
 
         if not command.strip():
             continue
