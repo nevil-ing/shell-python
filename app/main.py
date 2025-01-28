@@ -102,7 +102,7 @@ def main():
                 last_tab_pressed = {"count": 1, "last_text": current_command}
             if last_tab_pressed["count"] == 1:
                 sys.stdout.write("\a")
-                sys.stdout.flush()  # Flush after printing the bell character
+                sys.stdout.flush()
             elif last_tab_pressed["count"] == 2:
                 display_matches(current_command, matches)
                 last_tab_pressed["count"] = 0
@@ -193,7 +193,7 @@ def main():
                             stdout = open(stdout_file, stdout_mode) if stdout_file else None
                             stderr = open(stderr_file, stderr_mode) if stderr_file else None
 
-                            subprocess.run([cms_dis_name, *cmd_args], stdout=stdout, stderr=stderr, check=True)
+                            subprocess.run([executable, *cmd_args], stdout=stdout, stderr=stderr, check=True)
 
                             if stdout:
                                 stdout.close()
