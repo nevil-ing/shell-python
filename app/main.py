@@ -40,9 +40,10 @@ def display_matches(text):
     builtin = ["echo ", "type ", "pwd ", "cd ", "exit "]
     matches = [cmd for cmd in builtin + executables() if cmd.startswith(text)]
     if matches:
-        sys.stdout.write("\r")  # Clear the current line
+        sys.stdout.write("\r")
+        sys.stdout.write(" ".join(matches) + "\n")
         sys.stdout.write("$ " + text + "\n")  # Print the prompt with the current text
-        sys.stdout.write("$ ".join(matches) + "\n")
+
         sys.stdout.flush()
 
 
