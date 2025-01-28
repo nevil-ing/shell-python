@@ -99,7 +99,7 @@ def main():
         return command, stdout_file, stderr_file, stdout_mode, stderr_mode
 
     while True:
-        sys.stdout.write("$ ")
+        sys.stdout.write("$ " + current_command)  # Display the prompt with the current text
         sys.stdout.flush()
         command = input()
 
@@ -120,9 +120,9 @@ def main():
                 display_matches(command)
                 last_tab_pressed["count"] = 0
                 current_command = command
-                continue # Continue so the main loop will start from the prompt again
+                continue  # Continue so the main loop will start from the prompt again
             else:
-                 continue
+                continue
 
         if not command.strip():
             continue
