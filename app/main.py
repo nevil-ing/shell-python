@@ -7,6 +7,7 @@ from sys import executable
 
 
 def executables():
+    """Return a list of all executable files in the PATH."""
     executables = []
     paths = os.getenv("PATH").split(":")
     for path in paths:
@@ -22,7 +23,7 @@ def executables():
 
 
 def completer(text, state):
-    """Auto-complete function for built in commands."""
+    """Auto-complete function for built-in commands and executables."""
     builtin = ["echo ", "type ", "pwd ", "cd ", "exit "]
     matches = [cmd for cmd in builtin + executables() if cmd.startswith(text)]
 
@@ -40,9 +41,11 @@ def display_matches(text):
     builtin = ["echo ", "type ", "pwd ", "cd ", "exit "]
     matches = [cmd for cmd in builtin + executables() if cmd.startswith(text)]
     if matches:
+        # Print the matches separated by 2 spaces
         sys.stdout.write("\r")
-        sys.stdout.write(" ".join(matches) + "\n")
-        sys.stdout.write("$ " + text)  # Print the prompt with the current text
+        sys.stdout.write("  ".join(matches) + "\n")
+        # Print the prompt with the current text
+        sys.stdout.write("$ " + text)
         sys.stdout.flush()
 
 
@@ -101,29 +104,25 @@ def main():
         sys.stdout.flush()
         command = input()
 
-        while True:
-            sys.stdout.write("$ ")
-            sys.stdout.flush()
-            command = input()
+        if command and command[-1] == "\t":
+            command = command[:-1]
+            if last_tab_pressed["last_text"] == command:
+                last_tab_pressed["count"] += 1
+            else:
+                last_tab_pressed = {"count": 1, "last_text": command}
 
-            if command and command[-1] == "\t":
-                command = command[:-1]
-                if last_tab_pressed["last_text"] == command:
-                    last_tab_pressed["count"] += 1
-                else:
-                    last_tab_pressed = {"count": 1, "last_text": command}
+            if last_tab_pressed["count"] == 1:
+                # Ring the bell on the first TAB press
+                sys.stdout.write("\a")
+                sys.stdout.flush()
 
-                if last_tab_pressed["count"] == 1:
-                    sys.stdout.write("\a")
-                    sys.stdout.flush()
-
-                if last_tab_pressed["count"] == 2:
-                    display_matches(command)
-                    last_tab_pressed["count"] = 0
-                    continue  # continue so the main loop will start from the prompt again
-                else:
-                    continue
-
+            if last_tab_pressed["count"] == 2:
+                # Display matches on the second TAB press
+                display_matches(command)
+                last_tab_pressed["count"] = 0
+                continue  # Continue so the main loop will start from the prompt again
+            else:
+                continue
 
         if not command.strip():
             continue
