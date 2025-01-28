@@ -116,7 +116,7 @@ def main():
             if last_tab_pressed["count"] == 2:
                 display_matches(command)
                 last_tab_pressed["count"] = 0
-            continue
+                display_matches(command)
 
         if not command.strip():
             continue
