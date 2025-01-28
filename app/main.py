@@ -6,8 +6,6 @@ import shlex
 from sys import executable
 
 
-
-
 def executables():
     executables = []
     paths = os.getenv("PATH").split(":")
@@ -22,36 +20,30 @@ def executables():
             )
     return executables
 
+
 def completer(text, state):
     """Auto-complete function for built in commands."""
-    last_tab_pressed = {"count": 0, "last_text": ""}
     builtin = ["echo ", "type ", "pwd ", "cd ", "exit "]
     matches = [cmd for cmd in builtin + executables() if cmd.startswith(text)]
 
-    if state == 0: # first time tab pressed
-        if last_tab_pressed["last_text"] == text:
-            last_tab_pressed["count"] += 1
-        else:
-            last_tab_pressed = {"count": 1, "last_text": text}
-        #handle first tab press: ring the bell
-        if last_tab_pressed["count"] == 1:
-            sys.stdout.write("\a")  # Ring the bell
-            sys.stdout.flush()
+    if not matches:
+        return None
 
-            #handle second tab press
-    if last_tab_pressed["count"] == 2:
+    if state < len(matches):
+        return matches[state]
+    else:
+        return None
 
-            if matches:
-                sys.stdout.write("".join(matches) + "\n")
-                sys.stdout.write(f"${text}")
 
-                sys.stdout.flush()
-
-            last_tab_pressed["count"] = 0  # Reset count after showing matches
-
-            return None
-
-    return matches[state] + " " if state < len(matches) else None
+def display_matches(text):
+    """Display the matches when tab is pressed twice."""
+    builtin = ["echo ", "type ", "pwd ", "cd ", "exit "]
+    matches = [cmd for cmd in builtin + executables() if cmd.startswith(text)]
+    if matches:
+        sys.stdout.write("\r")  # Clear the current line
+        sys.stdout.write(" ".join(matches) + "\n")
+        sys.stdout.write("$ " + text)
+        sys.stdout.flush()
 
 
 def main():
@@ -64,12 +56,14 @@ def main():
         "pwd": "pwd is a shell builtin",
         "cd": "cd is a shell builtin",
     }
+
+    last_tab_pressed = {"count": 0, "last_text": ""}
+
     readline.set_completer(completer)
     readline.parse_and_bind("tab: complete")
 
     def shell_echo_commands(arguments):
         print(" ".join(arguments))
-
 
     def handle_redirection(parsed_command):
         stdout_file = None
@@ -105,8 +99,25 @@ def main():
     while True:
         sys.stdout.write("$ ")
         sys.stdout.flush()
-        command = input().strip()
-        if not command:
+        command = input()
+
+        if command and command[-1] == "\t":
+            command = command[:-1]
+            if last_tab_pressed["last_text"] == command:
+                last_tab_pressed["count"] += 1
+            else:
+                last_tab_pressed = {"count": 1, "last_text": command}
+
+            if last_tab_pressed["count"] == 1:
+                sys.stdout.write("\a")
+                sys.stdout.flush()
+
+            if last_tab_pressed["count"] == 2:
+                display_matches(command)
+                last_tab_pressed["count"] = 0
+            continue
+
+        if not command.strip():
             continue
 
         parsed_command = shlex.split(command)
@@ -201,6 +212,7 @@ def main():
                         pass
                 else:
                     print(f"{cmd_name}: command not found")
+
 
 if __name__ == "__main__":
     main()
