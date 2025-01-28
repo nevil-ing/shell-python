@@ -44,9 +44,8 @@ def display_matches(text):
         # Print the matches separated by 2 spaces
         sys.stdout.write("\n")  # Move to the next line for matches
         sys.stdout.write("  ".join(matches) + "\n")  # Print matches
+        sys.stdout.write(f"$ {text}") # Reprint the prompt and the text
 
-        # Reprint the prompt and the text
-        sys.stdout.write(f"$ {text}")
         sys.stdout.flush()
 
 
