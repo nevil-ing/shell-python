@@ -44,8 +44,6 @@ def display_matches(text):
         # Print the matches separated by 2 spaces
         sys.stdout.write("\n")  # Move to the next line for matches
         sys.stdout.write("  ".join(matches) + "\n")  # Print matches
-        sys.stdout.write(f"$ {text}") # Reprint the prompt and the text
-
         sys.stdout.flush()
 
 
@@ -61,6 +59,7 @@ def main():
     }
 
     last_tab_pressed = {"count": 0, "last_text": ""}
+    current_command = ""
 
     readline.set_completer(completer)
     readline.parse_and_bind("tab: complete")
@@ -120,9 +119,10 @@ def main():
                 # Display matches on the second TAB press
                 display_matches(command)
                 last_tab_pressed["count"] = 0
-                continue  # Continue so the main loop will start from the prompt again
+                current_command = command
+                continue # Continue so the main loop will start from the prompt again
             else:
-                continue
+                 continue
 
         if not command.strip():
             continue
@@ -207,7 +207,7 @@ def main():
                         stdout = open(stdout_file, stdout_mode) if stdout_file else None
                         stderr = open(stderr_file, stderr_mode) if stderr_file else None
 
-                        subprocess.run([cms_dis_name, *cmd_args], stdout=stdout, stderr=stderr, check=True)
+                        subprocess.run([executable, *cmd_args], stdout=stdout, stderr=stderr, check=True)
 
                         if stdout:
                             stdout.close()
