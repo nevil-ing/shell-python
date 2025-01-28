@@ -42,10 +42,10 @@ def display_matches(text):
     matches = [cmd for cmd in builtin + executables() if cmd.startswith(text)]
     if matches:
         # Print the matches separated by 2 spaces
-        sys.stdout.write("\r")
-        sys.stdout.write("  ".join(matches) + "\n")
+        sys.stdout.write("\r")  # Move cursor to the beginning of the line
+        sys.stdout.write("  ".join(matches) + "\n")  # Print matches and move to a new line
         # Print the prompt with the current text
-        sys.stdout.write("$ " + text)
+        sys.stdout.write("$ " + text)  # Print the prompt without a newline
         sys.stdout.flush()
 
 
@@ -105,7 +105,7 @@ def main():
         command = input()
 
         if command and command[-1] == "\t":
-            command = command[:-1]
+            command = command[:-1]  # Remove the TAB character
             if last_tab_pressed["last_text"] == command:
                 last_tab_pressed["count"] += 1
             else:
