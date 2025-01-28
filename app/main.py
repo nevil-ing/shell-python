@@ -41,8 +41,8 @@ def display_matches(text):
     matches = [cmd for cmd in builtin + executables() if cmd.startswith(text)]
     if matches:
         sys.stdout.write("\r")  # Clear the current line
-        sys.stdout.write(" ".join(matches) + "\n")
-        sys.stdout.write("$ " + text)
+        sys.stdout.write("$ " + text + "\n")  # Print the prompt with the current text
+        sys.stdout.write(" ".join(matches) + "\n")  # Print the suggestions
         sys.stdout.flush()
 
 
