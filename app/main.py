@@ -42,7 +42,7 @@ def display_matches(text):
     if matches:
         sys.stdout.write("\r")  # Clear the current line
         sys.stdout.write("$ " + text + "\n")  # Print the prompt with the current text
-        sys.stdout.write(" ".join(matches) + "\n")  # Print the suggestions
+        sys.stdout.write("$ ".join(matches) + "\n")
         sys.stdout.flush()
 
 
