@@ -42,10 +42,11 @@ def display_matches(text):
     matches = [cmd for cmd in builtin + executables() if cmd.startswith(text)]
     if matches:
         # Print the matches separated by 2 spaces
-        sys.stdout.write("\r")  # Move cursor to the beginning of the line
-        sys.stdout.write("  ".join(matches) + "\n")  # Print matches and move to a new line
-        # Print the prompt with the current text
-        sys.stdout.write("$ " + text)  # Print the prompt without a newline
+        sys.stdout.write("\n")  # Move to the next line for matches
+        sys.stdout.write("  ".join(matches) + "\n")  # Print matches
+
+        # Reprint the prompt and the text
+        sys.stdout.write(f"$ {text}")
         sys.stdout.flush()
 
 
