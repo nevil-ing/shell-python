@@ -43,8 +43,8 @@ def display_matches(text):
         sys.stdout.write("\r")
         sys.stdout.write(" ".join(matches) + "\n")
         sys.stdout.write("$ " + text + "\n")  # Print the prompt with the current text
-
         sys.stdout.flush()
+        readline.redisplay()
 
 
 def main():
