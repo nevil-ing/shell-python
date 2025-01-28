@@ -42,9 +42,8 @@ def display_matches(text):
     if matches:
         sys.stdout.write("\r")
         sys.stdout.write(" ".join(matches) + "\n")
-        sys.stdout.write("$ " + text + "\n")  # Print the prompt with the current text
+        sys.stdout.write("$ " + text)  # Print the prompt with the current text
         sys.stdout.flush()
-        readline.redisplay()
 
 
 def main():
@@ -102,23 +101,28 @@ def main():
         sys.stdout.flush()
         command = input()
 
-        if command and command[-1] == "\t":
-            command = command[:-1]
-            if last_tab_pressed["last_text"] == command:
-                last_tab_pressed["count"] += 1
-            else:
-                last_tab_pressed = {"count": 1, "last_text": command}
+        while True:
+            sys.stdout.write("$ ")
+            sys.stdout.flush()
+            command = input()
 
-            if last_tab_pressed["count"] == 1:
-                sys.stdout.write("\a")
-                sys.stdout.flush()
+            if command and command[-1] == "\t":
+                command = command[:-1]
+                if last_tab_pressed["last_text"] == command:
+                    last_tab_pressed["count"] += 1
+                else:
+                    last_tab_pressed = {"count": 1, "last_text": command}
 
-            if last_tab_pressed["count"] == 2:
-                display_matches(command)
-                last_tab_pressed["count"] = 0
-                continue  # continue so the main loop will start from the prompt again
-            else:
-                continue
+                if last_tab_pressed["count"] == 1:
+                    sys.stdout.write("\a")
+                    sys.stdout.flush()
+
+                if last_tab_pressed["count"] == 2:
+                    display_matches(command)
+                    last_tab_pressed["count"] = 0
+                    continue  # continue so the main loop will start from the prompt again
+                else:
+                    continue
 
 
         if not command.strip():
