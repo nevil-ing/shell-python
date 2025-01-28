@@ -102,7 +102,7 @@ def main():
                 last_tab_pressed = {"count": 1, "last_text": current_command}
             if last_tab_pressed["count"] == 1:
                 sys.stdout.write("\a")
-                sys.stdout.flush()
+                sys.stdout.flush()  # Flush after printing the bell character
             elif last_tab_pressed["count"] == 2:
                 display_matches(current_command, matches)
                 last_tab_pressed["count"] = 0
