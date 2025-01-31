@@ -119,7 +119,7 @@ def main():
                 # Display matches on the second TAB press
                 display_matches(command)
                 last_tab_pressed["count"] = 0
-                current_command = command
+                current_command = command  # Update current_command
                 continue  # Continue so the main loop will start from the prompt again
             else:
                 continue
@@ -207,7 +207,7 @@ def main():
                         stdout = open(stdout_file, stdout_mode) if stdout_file else None
                         stderr = open(stderr_file, stderr_mode) if stderr_file else None
 
-                        subprocess.run([executable, *cmd_args], stdout=stdout, stderr=stderr, check=True)
+                        subprocess.run([cms_dis_name, *cmd_args], stdout=stdout, stderr=stderr, check=True)
 
                         if stdout:
                             stdout.close()
